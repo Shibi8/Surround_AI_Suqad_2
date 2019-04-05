@@ -1,0 +1,6 @@
+output:
+  text: Hello World
+
+image: epl
+company: yourcompany
+version: latest
