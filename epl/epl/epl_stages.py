@@ -10,3 +10,4 @@ class EplData(SurroundData):
 class ValidateData(Stage):
     def operate(self, surround_data, config):
         surround_data.output_data = "TODO: Validate input data assumptions here"
+
