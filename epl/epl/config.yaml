@@ -4,3 +4,6 @@ output:
 image: epl
 company: yourcompany
 version: latest
+
+surround:
+  path_to_epl_data: ../data
