@@ -1,4 +1,5 @@
 from surround import Stage, SurroundData
+from sklearn.preprocessing import normalize
 import pandas as pd
 import glob
 import logging
@@ -38,8 +39,58 @@ class DataInput(Stage):
 
 
 class WranglingData(Stage):
+
+    def __init__(self):
+        self.processed_data = pd.DataFrame()
+
+    def clean_empty_data(self):
+        self.processed_data.dropna(inplace=True)
+
+    def categorical_team_to_ordinal_value(self, team):
+        elite_team = ["""'Man United'""", 'Liverpool', 'Arsenal', 'Chelsea', 'Tottenham']
+        semi_elite_team = ["""'Man City'""", 'Everton', """'Aston Villa'""", 'Newcastle', 'Wolves']
+        pro_team = ["""'Nottingham Forest'""", 'Blackburn', """'Sheffield Wednesday'""", 'Sunderland',
+                    """'Leeds United'"""]
+        semi_pro_team = ["""'West Brom'""", """'West Ham'""", """'Sheffield United'""", 'Leicester', 'Portsmouth']
+
+        if team in elite_team:
+            return 5
+        elif team in semi_elite_team:
+            return 4
+        elif team in pro_team:
+            return 3
+        elif team in semi_pro_team:
+            return 2
+        else:
+            return 1
+
+    def normalize_data(self):
+        columns_to_standardize = [['HS', 'AS', 'HST', 'AST', 'HF', 'AF', 'HC', 'AC', 'HR', 'AR']]
+
+        for each_col in columns_to_standardize:
+            self.processed_data[each_col] = normalize(self.processed_data[each_col])
+
     def operate(self, surround_data, config):
-        surround_data.output_data = "TODO: Clean data here"
+        # Remove the row with the missing value of any attributes
+        self.processed_data = surround_data.input_data
+        self.clean_empty_data()
+        print(self.processed_data.shape)
+        print(self.processed_data.head(10))
+
+        # Change the categorical ordinal data into Numerical value.
+        self.processed_data['HomeTeam'] = self.processed_data['HomeTeam'].apply(
+            self.categorical_team_to_ordinal_value)
+        self.processed_data['AwayTeam'] = self.processed_data['AwayTeam'].apply(
+            self.categorical_team_to_ordinal_value)
+
+        print(self.processed_data.head(10))
+
+        # Standardize the data using the pandas function
+        self.normalize_data()
+        print(self.processed_data.head(10))
+
+        # Set the processed data to the SurroundData object
+        surround_data.input_data = self.processed_data
 
 
 class ModellingData(Stage):
