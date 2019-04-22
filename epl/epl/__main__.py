@@ -1,6 +1,6 @@
 import logging
 from surround import Surround, Config
-from epl.epl.epl_stages import DataInput, EplData
+from epl.epl.epl_stages import DataInput, EplData, WranglingData
 # from .wrapper import PipelineWrapper
 # import os
 # import json
@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    surround = Surround([DataInput()])
+    surround = Surround([DataInput(), WranglingData()])
     surround_config = Config()
     surround_config.read_config_files(["config.yaml"])
     surround.set_config(surround_config)
