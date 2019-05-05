@@ -43,9 +43,11 @@ class WranglingData(Stage):
     def __init__(self):
         self.processed_data = pd.DataFrame()
 
+    # This function clean the row containing empty field.
     def clean_empty_data(self):
         self.processed_data.dropna(inplace=True)
 
+    # This function assign the rank of each team.
     def categorical_team_to_ordinal_value(self, team):
         elite_team = ["""'Man United'""", 'Liverpool', 'Arsenal', 'Chelsea', 'Tottenham']
         semi_elite_team = ["""'Man City'""", 'Everton', """'Aston Villa'""", 'Newcastle', 'Wolves']
@@ -64,11 +66,17 @@ class WranglingData(Stage):
         else:
             return 1
 
+    # This function normalizes the features on the columns_to_standardize.
     def normalize_data(self):
         columns_to_standardize = [['HS', 'AS', 'HST', 'AST', 'HF', 'AF', 'HC', 'AC', 'HR', 'AR']]
 
         for each_col in columns_to_standardize:
             self.processed_data[each_col] = normalize(self.processed_data[each_col])
+
+    # This function shift column from middle to the last of the dataframe.
+    def shift_column(self):
+        temp_store = self.processed_data.pop('FTR')
+        self.processed_data['FTR'] = temp_store
 
     def operate(self, surround_data, config):
         # Remove the row with the missing value of any attributes
@@ -89,12 +97,17 @@ class WranglingData(Stage):
         self.normalize_data()
         print(self.processed_data.head(10))
 
+        # Shift the FTR column to the last column.
+        self.shift_column()
+        print(self.processed_data.head(10))
+
         # Set the processed data to the SurroundData object
         surround_data.input_data = self.processed_data
 
 
 class ModellingData(Stage):
     def operate(self, surround_data, config):
+        print("This function is to be completed")
         surround_data.output_data = "TODO: Data Training, Testing and Predicting here"
 
 
