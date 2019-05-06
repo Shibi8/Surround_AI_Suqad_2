@@ -58,7 +58,7 @@ dataframe = pd.read_csv("/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/
 dataframe.head()
 autocorrelation_plot(dataframe.ix[:, 4])
 
-### AVALIAR V3 LINHAS
+### ARIMA MODELLING and Dickey Fuller Test
 model00 = ARIMA(np.array(dataframe.ix[:, 4]), dates=None, order=(2, 1, 0))
 model11 = model00.fit(disp=1)
 model11.summary()
