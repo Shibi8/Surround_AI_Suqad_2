@@ -1,0 +1,10 @@
+output:
+  text: Hello World
+
+image: arima
+company: yourcompany
+version: latest
+
+# Details of class inheriting from Wrapper
+wrapper-info: arima.wrapper.PipelineWrapper
+surround:path_to_arima_data: /Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Data.csv
