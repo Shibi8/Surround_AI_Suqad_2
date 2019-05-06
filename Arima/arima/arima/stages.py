@@ -188,7 +188,7 @@ for i in range(0, 10):
 
 predicted = train / seasonal[-1]
 predicted_ok = predicted[-11:]
-dataframe3 = pd.read_csv('Apple_Data_Comparison.csv')
+dataframe3 = pd.read_csv("/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/arima/Data1/Compare.csv")
 real_data = np.array(dataframe3.ix[end:end + 10, 4])
 
 plt.figure(figsize=(8, 5))
