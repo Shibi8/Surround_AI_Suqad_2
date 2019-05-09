@@ -6,4 +6,4 @@ company: yourcompany
 version: latest
 
 surround:
-path_to_arima_data: /Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/arima/Data1/Data.csv
+  path: '/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Apple_Data_300.csv'

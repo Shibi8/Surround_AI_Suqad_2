@@ -1,6 +1,6 @@
 import json
 from surround import Surround, Wrapper, AllowedTypes
-from stages import ValidateData, ArimaData
+from Stages import ValidateData, SVRData
 
 class PipelineWrapper(Wrapper):
     def __init__(self):
@@ -9,6 +9,6 @@ class PipelineWrapper(Wrapper):
 
     def run(self, input_data):
         text = json.loads(input_data)["data"]
-        data = ArimaData(text)
+        data = SVRData(text)
         self.surround.process(data)
         return {"output": data.output_data}
