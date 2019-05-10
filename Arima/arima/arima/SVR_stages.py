@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-
 class FeedData(Stage):
 
     def __init__(self):
@@ -17,14 +16,11 @@ class FeedData(Stage):
 
 class SVRData(SurroundData, Stage):
 
-
-
-    def get_data(self, df):
-
-            dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Apple_Data_300.csv')
-            dta.Date = dta.Date.apply(pd.to_datetime)
-            dates = np.array(dta.Date)
-            prices = np.array(dta.Open)
+    def get_data(self):
+        dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Apple_Data_300.csv')
+        dta.Date = dta.Date.apply(pd.to_datetime)
+        dates = np.array(dta.Date)
+        prices = np.array(dta.Open)
 
 
 class ComputeForecast(SurroundData, Stage):
@@ -48,29 +44,3 @@ class ComputeForecast(SurroundData, Stage):
         plt.legend()
         plt.show()
         return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_rbf.predict(x)[0]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
