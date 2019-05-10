@@ -17,24 +17,20 @@ class FeedData(Stage):
 
 class SVRData(SurroundData, Stage):
 
-        start = 0
-        end = -10
-        df = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Apple_Data_300.csv')[start:end]
-        df.head()
 
-        def get_data(df):
 
-            data = df.copy()
-            data['date'] = data['date'].str.split('-').str[2]
-            data['date'] = pd.to_numeric(data['date'])
-            return [data['date'].tolist(), data['close'].tolist()]
+    def get_data(self, df):
 
-        dates, prices = get_data(df)
+            dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Apple_Data_300.csv')
+            dta.Date = dta.Date.apply(pd.to_datetime)
+            dates = np.array(dta.Date)
+            prices = np.array(dta.Open)
 
 
 class ComputeForecast(SurroundData, Stage):
 
-    def predict_price(dates, prices, x):
+    def predict_price(self, dates, prices, x, surround_data):
+
         dates = np.reshape(dates, (len(dates), 1))
         svr_lin = SVR(kernel='linear', C=1e3)
         svr_poly = SVR(kernel='poly', C=1e3, degree=2)
@@ -51,8 +47,11 @@ class ComputeForecast(SurroundData, Stage):
         plt.title('Support Vector Regression Apple Stock Model')
         plt.legend()
         plt.show()
+        return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_rbf.predict(x)[0]
 
-        return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_poly.predict(x)[0]
+
+
+
 
 
 
