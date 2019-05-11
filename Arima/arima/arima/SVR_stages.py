@@ -14,18 +14,26 @@ class FeedData(Stage):
         print("this is working fine")
 
 
-class SVRData(SurroundData, Stage):
+class SVRData(SurroundData):
+    def __init__(self):
+        self.dta = pd.DataFrame()
+
+    def getfunc(self):
+        sth = 25
+        return sth
 
     def get_data(self):
-        dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Apple_Data_300.csv')
-        dta.Date = dta.Date.apply(pd.to_datetime)
-        dates = np.array(dta.Date)
-        prices = np.array(dta.Open)
+        self.dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Apple_Data_300.csv')
 
 
 class ComputeForecast(SurroundData, Stage):
+    def __init__(self):
+        self.something = []
 
-    def predict_price(self, dates, prices, x, surround_data):
+    def somp(self):
+        print("this is fine")
+
+    def predict_price(self, dates, prices):
 
         dates = np.reshape(dates, (len(dates), 1))
         svr_lin = SVR(kernel='linear', C=1e3)
@@ -34,13 +42,26 @@ class ComputeForecast(SurroundData, Stage):
         svr_rbf.fit(dates, prices)
         svr_lin.fit(dates, prices)
         svr_poly.fit(dates, prices)
-        plt.scatter(dates, prices, color='black', label='Data')
-        plt.plot(dates, svr_rbf.predict(dates), color='red', label='RBF model')
-        plt.plot(dates, svr_lin.predict(dates), color='green', label='Linear model')
-        plt.plot(dates, svr_poly.predict(dates), color='blue', label='Polynomial model')
-        plt.xlabel('Date')
-        plt.ylabel('Price')
-        plt.title('Support Vector Regression Apple Stock Model')
-        plt.legend()
-        plt.show()
-        return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_rbf.predict(x)[0]
+        print(svr_rbf.predict(dates))
+        # print(svr)
+        # plt.scatter(dates, prices, color='black', label='Data')
+        # plt.plot(dates, svr_rbf.predict(dates), color='red', label='RBF model')
+        # plt.plot(dates, svr_lin.predict(dates), color='green', label='Linear model')
+        # plt.plot(dates, svr_poly.predict(dates), color='blue', label='Polynomial model')
+        # plt.xlabel('Date')
+        # plt.ylabel('Price')
+        # plt.title('Support Vector Regression Apple Stock Model')
+        # plt.legend()
+        # plt.show()
+        # return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_rbf.predict(x)[0]
+
+    def operate(self, surround_data, config):
+        s_data = surround_data.dta
+        print(s_data)
+        s_data.Date = s_data.date.apply(pd.to_datetime)
+        s_data['date'] = pd.to_datetime(s_data.date, format='%d-%m-%Y')
+        dates = np.array(s_data.date)
+        prices = np.array(s_data.open)
+        self.predict_price(dates, prices)
+
+class plott
