@@ -53,7 +53,7 @@ class ComputeForecast(SurroundData, Stage):
         prices = np.array(s_data.open)
         self.predict_price(dates, prices)
 
-class PlotPredict(SurroundData, Stage)
+class PlotPredict(SurroundData, Stage):
     def __init__(self):
         self.dta = pd.DataFrame()
 
