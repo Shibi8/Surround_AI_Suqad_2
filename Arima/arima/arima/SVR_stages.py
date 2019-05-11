@@ -29,7 +29,7 @@ class SVRData(SurroundData):
 
 class ComputeForecast(SurroundData, Stage):
     def __init__(self):
-        self.dta = pd.DataFrame()
+        self.something = []
 
     def somp(self):
         print("this is fine")
@@ -53,10 +53,25 @@ class ComputeForecast(SurroundData, Stage):
         prices = np.array(s_data.open)
         self.predict_price(dates, prices)
 
+class PlotPredict(SurroundData, Stage)
+    def __init__(self):
+        self.dta = pd.DataFrame()
 
+    def plot_it(self, x):
+        plt.scatter(dates, prices, color='black', label='Data')  # plotting the initial datapoints
+        plt.plot(dates, svr_rbf.predict(dates), color='red', label='RBF model')  # RBF kernel
+        plt.plot(dates, svr_lin.predict(dates), color='green', label='Linear model')  # linear kernel
+        plt.plot(dates, svr_poly.predict(dates), color='blue', label='Polynomial model')  # polynomial kernel
+        plt.xlabel('Date')
+        plt.ylabel('Price')
+        plt.title('Support Vector Regression Apple Stock Model')
+        plt.legend()
+        plt.show()
+        return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_poly.predict(x)[0]
 
+    def operate(self, surround_data, config):
 
-
+        self.plot_it()
 
 
 
