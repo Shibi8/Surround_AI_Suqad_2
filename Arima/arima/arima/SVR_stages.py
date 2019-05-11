@@ -48,6 +48,7 @@ class ComputeForecast(SurroundData, Stage):
 
     def operate(self, surround_data, config):
         s_data = surround_data.dta
+        s_data.pd.date_range(start_date, periods=10, freq='D')
         s_data.date = s_data.date.apply(pd.to_datetime)
         dates = np.array(s_data.date)
         prices = np.array(s_data.open)
