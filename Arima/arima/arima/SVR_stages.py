@@ -1,6 +1,7 @@
 from surround import SurroundData, Stage
 import numpy as np
 from sklearn.svm import SVR
+from datetime import datetime
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -28,7 +29,7 @@ class SVRData(SurroundData):
 
 class ComputeForecast(SurroundData, Stage):
     def __init__(self):
-        self.something = []
+        self.dta = pd.DataFrame()
 
     def somp(self):
         print("this is fine")
@@ -44,24 +45,20 @@ class ComputeForecast(SurroundData, Stage):
         svr_poly.fit(dates, prices)
         print(svr_rbf.predict(dates))
         # print(svr)
-        # plt.scatter(dates, prices, color='black', label='Data')
-        # plt.plot(dates, svr_rbf.predict(dates), color='red', label='RBF model')
-        # plt.plot(dates, svr_lin.predict(dates), color='green', label='Linear model')
-        # plt.plot(dates, svr_poly.predict(dates), color='blue', label='Polynomial model')
-        # plt.xlabel('Date')
-        # plt.ylabel('Price')
-        # plt.title('Support Vector Regression Apple Stock Model')
-        # plt.legend()
-        # plt.show()
-        # return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_rbf.predict(x)[0]
 
     def operate(self, surround_data, config):
         s_data = surround_data.dta
-        print(s_data)
-        s_data.Date = s_data.date.apply(pd.to_datetime)
-        s_data['date'] = pd.to_datetime(s_data.date, format='%d-%m-%Y')
+        s_data.date = s_data.date.apply(pd.to_datetime)
         dates = np.array(s_data.date)
         prices = np.array(s_data.open)
         self.predict_price(dates, prices)
 
-class plott
+
+
+
+
+
+
+
+
+
