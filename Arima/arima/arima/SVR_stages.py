@@ -1,9 +1,9 @@
 from surround import SurroundData, Stage
 import numpy as np
 from sklearn.svm import SVR
+from datetime import datetime
 import matplotlib.pyplot as plt
 import pandas as pd
-
 
 
 class FeedData(Stage):
@@ -15,26 +15,27 @@ class FeedData(Stage):
         print("this is working fine")
 
 
-class SVRData(SurroundData, Stage):
+class SVRData(SurroundData):
+    def __init__(self):
+        self.dta = pd.DataFrame()
 
-        start = 0
-        end = -10
-        df = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Apple_Data_300.csv')[start:end]
-        df.head()
+    def getfunc(self):
+        sth = 25
+        return sth
 
-        def get_data(df):
-
-            data = df.copy()
-            data['date'] = data['date'].str.split('-').str[2]
-            data['date'] = pd.to_numeric(data['date'])
-            return [data['date'].tolist(), data['close'].tolist()]
-
-        dates, prices = get_data(df)
+    def get_data(self):
+        self.dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/Apple_Data_300.csv')
 
 
 class ComputeForecast(SurroundData, Stage):
+    def __init__(self):
+        self.something = []
 
-    def predict_price(dates, prices, x):
+    def somp(self):
+        print("this is fine")
+
+    def predict_price(self, dates, prices):
+
         dates = np.reshape(dates, (len(dates), 1))
         svr_lin = SVR(kernel='linear', C=1e3)
         svr_poly = SVR(kernel='poly', C=1e3, degree=2)
@@ -42,34 +43,36 @@ class ComputeForecast(SurroundData, Stage):
         svr_rbf.fit(dates, prices)
         svr_lin.fit(dates, prices)
         svr_poly.fit(dates, prices)
-        plt.scatter(dates, prices, color='black', label='Data')
-        plt.plot(dates, svr_rbf.predict(dates), color='red', label='RBF model')
-        plt.plot(dates, svr_lin.predict(dates), color='green', label='Linear model')
-        plt.plot(dates, svr_poly.predict(dates), color='blue', label='Polynomial model')
+        print(svr_rbf.predict(dates))
+        # print(svr)
+
+    def operate(self, surround_data, config):
+        s_data = surround_data.dta
+        s_data.pd.date_range(start_date, periods=10, freq='D')
+        s_data.date = s_data.date.apply(pd.to_datetime)
+        dates = np.array(s_data.date)
+        prices = np.array(s_data.open)
+        self.predict_price(dates, prices)
+
+class PlotPredict(SurroundData, Stage):
+    def __init__(self):
+        self.dta = pd.DataFrame()
+
+    def plot_it(self, x):
+        plt.scatter(dates, prices, color='black', label='Data')  # plotting the initial datapoints
+        plt.plot(dates, svr_rbf.predict(dates), color='red', label='RBF model')  # RBF kernel
+        plt.plot(dates, svr_lin.predict(dates), color='green', label='Linear model')  # linear kernel
+        plt.plot(dates, svr_poly.predict(dates), color='blue', label='Polynomial model')  # polynomial kernel
         plt.xlabel('Date')
         plt.ylabel('Price')
         plt.title('Support Vector Regression Apple Stock Model')
         plt.legend()
         plt.show()
-
         return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_poly.predict(x)[0]
 
+    def operate(self, surround_data, config):
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        self.plot_it()
 
 
 

@@ -22,5 +22,7 @@ if __name__ == "__main__":
     surround_config.read_config_files(["config.yaml"])
     surround.set_config(surround_config)
     surround.init_stages()
+    svr_data = SVRData()
+    svr_data.get_data()
 
-    surround.process(SVRData(), ComputeForecast())
+    surround.process(svr_data)
