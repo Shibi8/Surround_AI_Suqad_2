@@ -1,8 +1,11 @@
+# Developed by Dipesh Bhatta
+# dbhatta@deakin.edu.au
+
 import logging
 import pandas as pd
 import glob
 from surround import Surround, Config
-from epl.epl.epl_stages import EplData, WranglingData, ModellingAndPrediction
+from epl.epl.epl_stages import EplData, WranglingData, ModellingAndPrediction, DisplayOutput
 # from .wrapper import PipelineWrapper
 # import os
 # import json
@@ -31,7 +34,7 @@ def fetch_data(surround_config):
 
 def main():
     logging.basicConfig(level=logging.INFO)
-    surround = Surround([WranglingData(), ModellingAndPrediction()])
+    surround = Surround([WranglingData(), ModellingAndPrediction(), DisplayOutput()])
     surround_config = Config()
     surround_config.read_config_files(["config.yaml"])
     surround.set_config(surround_config)

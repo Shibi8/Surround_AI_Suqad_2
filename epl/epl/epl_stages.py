@@ -1,3 +1,5 @@
+# Developed by Dipesh Bhatta
+# dbhatta@deakin.edu.au
 from surround import Stage, SurroundData
 from sklearn.preprocessing import normalize
 import pandas as pd
@@ -5,9 +7,10 @@ import matplotlib.pyplot as plt
 from sklearn.cross_validation import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
+from sklearn.preprocessing import LabelEncoder
+from epl.epl.dbhatta_algorithm import DbhattaAlgorithm
 
 import time
-import glob
 import logging
 
 
@@ -15,6 +18,7 @@ class EplData(SurroundData):
 
     def __init__(self):
         self.input_data = pd.DataFrame()
+        self.result_data = pd.DataFrame()
         self.errors = []
 
     def feed_data(self, surround_data):
@@ -132,6 +136,21 @@ class ModellingAndPrediction(Stage):
 
     def __init__(self):
         self.processed_data = pd.DataFrame()
+        self.predicted_output = pd.DataFrame()
+
+    def combine_result(self, x_test, y_test, y_predicted):
+        print("this is the x test data {}".format(type(x_test)))
+        print("this is the y result data {}".format(type(y_test)))
+        print("this is the predicted data {}".format(type(y_predicted)))
+
+        # Concatenating x_test Dataframe and y_test panda series to a dataframe.
+        self.predicted_output = pd.concat([x_test, y_test], axis=1)
+
+        # pd.options.mode.chained_assignment = None #If copy slice warning occur due to chained assignments.
+        # Adding the predicted Full Time Result in the test data.
+        self.predicted_output['Predicted_FTR'] = y_predicted
+
+        print(self.predicted_output)
 
     def prediction_report(self, real, prediction):
         h = 0
@@ -161,9 +180,12 @@ class ModellingAndPrediction(Stage):
 
         x_data = self.processed_data[feature_columns]
         y_data = self.processed_data['FTR']
-        print(x_data)
-        print(y_data)
+        # print(x_data)
+        # print(y_data)
 
+        # This function splits data into 70% of training data and 30% of test data.
+        # And returns the 2 sets of panda dataframe as train and test data features
+        # and 2 sets of panda series as train and test data class.
         x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.3, random_state=55)
 
         # instantiate the model (using the default parameters)
@@ -174,17 +196,46 @@ class ModellingAndPrediction(Stage):
 
         # This is the predicted data.
         y_predicted = log_reg.predict(x_test)
+
+        # dbhatta = DbhattaAlgorithm()
+        # dbhatta.fit(x_train, y_train)
+        # y_predicted = dbhatta.predict(x_test)
+
         print("This is the predicted data {0}".format(y_predicted))
+        # Combining all the test data to get the final result.
+        self.combine_result(x_test, y_test, y_predicted)
 
         # Prediction statistics
         self.prediction_report(y_test, y_predicted)
 
     def operate(self, surround_data, config):
         self.processed_data = surround_data.input_data
-        print("This function is to be completed")
         self.train_test_data()
+        surround_data.result_data = self.predicted_output
 
 
-class DataOutput(Stage):
+class DisplayOutput(Stage):
+
+    def display_histogram(self, histo_data):
+        print(type(histo_data))
+        histo_values = histo_data.values
+        print(type(histo_values))
+        plt.hist(histo_values)
+        plt.show()
+        print("Display histogram is working fine.")
+
+    def label_encoding(self, result_data):
+        ftr_encoder = LabelEncoder()
+        result_data['FTR_encoded'] = ftr_encoder.fit_transform(result_data.FTR)
+        result_data['Predicted_FTR_encoded'] = ftr_encoder.fit_transform(result_data.Predicted_FTR)
+        return result_data
+
     def operate(self, surround_data, config):
-        surround_data.output_data = "TODO: Displaying the result here"
+        # print(surround_data.result_data)
+        # Full time result has been encoded to display in the graph.
+        encoded_surround_data = self.label_encoding(surround_data.result_data)
+        # Plot the histogram of actual Full Time Result .
+        self.display_histogram(encoded_surround_data['FTR_encoded'])
+        # Plot the histogram of predicted Full Time Result.
+        self.display_histogram(encoded_surround_data['Predicted_FTR_encoded'])
+        print("It's fine up to here.")
