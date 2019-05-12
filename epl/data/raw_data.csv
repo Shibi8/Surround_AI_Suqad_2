@@ -1,0 +1,11 @@
+home_shoot,away_shoot,home_shot_on_target,away_shot_on_target,home_possession,away_possession,home_freekick,away_freekick,FTR
+10,6,5,3,60,40,5,3,H
+20,21,10,15,45,55,2,5,H
+5,15,4,6,35,65,3,2,H
+3,12,1,10,40,60,2,2,D
+9,8,3,4,55,45,1,0,D
+25,20,11,7,50,50,5,4,D
+12,14,5,7,40,60,3,6,A
+5,16,1,8,20,80,2,9,A
+20,10,9,6,68,32,9,8,A
+9,8,7,3,40,60,2,3,D
