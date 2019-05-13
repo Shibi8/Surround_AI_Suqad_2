@@ -1,6 +1,8 @@
 import logging
 from surround import Surround, Config
-from arima.SVR_stages import FeedData, SVRData, ComputeForecast
+from arima.SVR_stages import FeedData, SVRData, ComputeForecast, PlotResult
+import glob
+import pandas as pd
 # from .wrapper import PipelineWrapper
 # import os
 # import json
@@ -15,9 +17,10 @@ logging.basicConfig(level=logging.INFO)
 #         f.write(output["output"])
 #     logging.info(output)
 
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    surround = Surround([FeedData(), ComputeForecast()])
+    surround = Surround([FeedData(), ComputeForecast(), PlotResult()])
     surround_config = Config()
     surround_config.read_config_files(["config.yaml"])
     surround.set_config(surround_config)

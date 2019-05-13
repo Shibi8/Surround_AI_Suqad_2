@@ -1,7 +1,29 @@
+# In this program, I attempt to build three different models that
+# predict the prices of Apple Stock
+# then plot them all on a graph to compare the results
+
+# The steps would be:
+# 1. Install Dependencies
+# 2. Collect Dataset
+# 3. Write Script
+# 4. Analyze Graph
+
+# Step 1: The four dependencies include:
+# pip3 install csv - To read data from the stock prices
+# pip3 install numpy - To perform calculations
+# pip3 install scikit-learn - build a predictive model
+# pip3 install matplotlib - plot datapoints on the model to analyze
+
+# Step 2: Collecting dataset (Apple stocks from the past 30 days)
+# Go to finance.google.com
+# Look up AAPL
+# Select "Historical prices"
+# Select "Download to spreadsheet"
+
+# Step 3: Write Script
 from surround import SurroundData, Stage
 import numpy as np
 from sklearn.svm import SVR
-from datetime import date
 import matplotlib.pyplot as plt
 import pandas as pd
 import csv
@@ -57,7 +79,30 @@ class ComputeForecast(SurroundData, Stage):
                 self.predict_price(dates, prices)
                 return
 
+class PlotResult(SurroundData, Stage):
+    def __init__(self):
+        self.dta = pd.DataFrame()
 
+    def plot(self):
+        plt.scatter(dates, prices, color='black', label='Data')  # plotting the initial datapoints
+        # The graphs are plotted with the help of SVR object in scikit-learn using the dates matrix as our parameter.
+        # Each will be a distinct color and and give them a distinct label.
+        plt.plot(dates, svr_rbf.predict(dates), color='red', label='RBF model')  # plotting the line made by the RBF kernel
+        plt.plot(dates, svr_lin.predict(dates), color='green', label='Linear model')  # plotting the line made by linear kernel
+        plt.plot(dates, svr_poly.predict(dates), color='blue', label='Polynomial model')  # plotting the line made by polynomial kernel
+        plt.xlabel('Date')  # Setting the x-axis
+        plt.ylabel('Price')  # Setting the y-axis
+        plt.title('Support Vector Regression for Apple Stock')  # Setting title
+        plt.legend()  # Add legend
+        plt.show()  # To display result on screen
+
+        return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_poly.predict(x)[0]  # returns predictions from each of our models
+
+
+    def operate(self, surround_data, config):
+         self.predict_price(dates, prices)
+         self.plot()
+         return
 
 
 
