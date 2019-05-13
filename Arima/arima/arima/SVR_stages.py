@@ -43,7 +43,7 @@ class SVRData(SurroundData):
         self.dta = pd.DataFrame()
 
     def get_data(self):
-        self.dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/AAPL.csv')
+        self.dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/AAPL (3).csv')
 
 
 
@@ -64,12 +64,14 @@ class ComputeForecast(SurroundData, Stage):
         svr_lin.fit(dates, prices)
         svr_poly.fit(dates, prices)
         print(svr_rbf.predict(dates))
+        print(svr_lin.predict(dates))
+        print(svr_poly.predict(dates))
 
     def operate(self, surround_data, config):
         dates = []
         prices = []
         s_data = surround_data.dta
-        with open('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/AAPL.csv', 'r') as csvfile:
+        with open('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/AAPL (3).csv', 'r') as csvfile:
             # csvFileReader allows us to iterate over every row in our csv file
             csvFileReader = csv.reader(csvfile)
             next(csvFileReader)  # skipping column names
@@ -77,11 +79,16 @@ class ComputeForecast(SurroundData, Stage):
                 dates.append(int(row[0].split('-')[0]))  # Only gets day of the month which is at index 0
                 prices.append(float(row[1]))
                 self.predict_price(dates, prices)
+
+
                 return
 
+
+
 class PlotResult(SurroundData, Stage):
+
     def __init__(self):
-        self.dta = pd.DataFrame()
+        self.surround_data = pd.DataFrame()
 
     def plot(self):
         plt.scatter(dates, prices, color='black', label='Data')  # plotting the initial datapoints
@@ -100,7 +107,7 @@ class PlotResult(SurroundData, Stage):
 
 
     def operate(self, surround_data, config):
-         self.predict_price(dates, prices)
+
          self.plot()
          return
 
