@@ -39,28 +39,21 @@ class FeedData(Stage):
 
 
 class SVRData(SurroundData):
-
     dates = []
     prices = []
 
     def __init__(self):
         self.dta = pd.DataFrame()
 
-
     def get_data(self):
         self.dta = pd.read_csv('config.yaml')
 
 
-
 class ComputeForecast(SurroundData, Stage):
-    def __init__(self):
-        self.something = []
 
-    def somp(self):
-        print("this is fine")
+
 
     def predict_price(self, dates, prices):
-
         """
         Builds predictive model and graphs it
         This function creates 3 models, each of them will be a type of support vector machine.
@@ -77,7 +70,7 @@ class ComputeForecast(SurroundData, Stage):
 
         """
 
-        dates = np.reshape(dates, (len(dates), 1)) # converts to a matrix from a vector
+        dates = np.reshape(dates, (len(dates), 1))  # converts to a matrix from a vector
         # Linear support vector regression model.
         # Takes in 3 parameters:
         # 	1. kernel: type of svm
@@ -103,9 +96,7 @@ class ComputeForecast(SurroundData, Stage):
         print(svr_lin.predict(dates))
         print(svr_poly.predict(dates))
 
-
     def operate(self, surround_data, config):
-
         svr_data = surround_data.dta
         file_path = config.get_path("surround.path")
         with open(file_path, 'r') as csvfile:
@@ -114,16 +105,13 @@ class ComputeForecast(SurroundData, Stage):
             next(csvFileReader)  # skipping column names
             for row in csvFileReader:
                 surround_data.dates.append(int(row[0].split('-')[0]))  # Only gets day of the month which is at index 0
-                surround_data.prices.append(float(row[1])) # Convert to float for more precision
+                surround_data.prices.append(float(row[1]))  # Convert to float for more precision
                 self.predict_price(surround_data.dates, surround_data.prices)
-
 
                 return
 
 
-
 class PlotResult(SurroundData, Stage):
-
 
     def __init__(self):
         self.surround_data = pd.DataFrame()
@@ -143,15 +131,6 @@ class PlotResult(SurroundData, Stage):
 
         return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_poly.predict(x)[0]  # returns predictions from each of our models
 
-
     def operate(self, surround_data, config):
-
-         self.plot(dates,prices)
-         return
-
-
-
-
-
-
-
+        self.plot(self, dates, prices)
+        return
