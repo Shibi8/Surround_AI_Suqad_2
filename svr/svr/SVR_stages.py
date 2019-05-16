@@ -43,7 +43,7 @@ class SVRData(SurroundData):
         self.dta = pd.DataFrame()
 
     def get_data(self):
-        self.dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/svr/data/AAPL.csv')
+        self.dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/svr/svr/config.yaml')
 
 
 
@@ -56,7 +56,38 @@ class ComputeForecast(SurroundData, Stage):
 
     def predict_price(self, dates, prices):
 
-        dates = np.reshape(dates, (len(dates), 1))
+        '''
+        	Builds predictive model and graphs it
+        	This function creates 3 models, each of them will be a type of support vector machine.
+        	A support vector machine is a linear seperator. It takes data that is already classified and tries
+        	to predict a set of unclassified data.
+        	So if we only had two data classes it would look like this
+        	It will be such that the distances from the closest points in each of the two groups is farthest away.
+        	When we add a new data point in our graph depending on which side of the line it is we could classify it
+        	accordingly with the label. However, in this program we are not predicting a class label, so we don't
+        	need to classify instead we are predicting the next value in a series which means we want to use regression.
+        	SVM's can be used for regression as well. The support vector regression is a type of SVM that uses the space between
+        	data points as a margin of error and predicts the most likely next point in a dataset.
+        	The predict_prices returns predictions from each of our models
+
+        	'''
+
+        dates = np.reshape(dates, (len(dates), 1)) # converts to a matrix from a vector
+        # Linear support vector regression model.
+        # Takes in 3 parameters:
+        # 	1. kernel: type of svm
+        # 	2. C: penalty parameter of the error term
+        # 	3. gamma: defines how far too far is.
+
+        # Two things are required when using an SVR, a line with the largest minimum margin
+        # and a line that correctly seperates as many instances as possible. Since we can't have both,
+        # C determines how much we want the latter.
+
+        # Next we make a polynomial SVR because in mathfolklore, the no free lunch theorum states that there are no guarantees for one optimization to work better
+        # than the other. So we'll try both.
+
+        # Finally, we create one more SVR using a radial basis function. RBF defines similarity to be the eucledian distance between two inputs
+        # If both are right on top of each other, the max similarity is one, if too far it is a zero
         svr_lin = SVR(kernel='linear', C=1e3)
         svr_poly = SVR(kernel='poly', C=1e3, degree=2)
         svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.1)
@@ -77,7 +108,7 @@ class ComputeForecast(SurroundData, Stage):
             next(csvFileReader)  # skipping column names
             for row in csvFileReader:
                 dates.append(int(row[0].split('-')[0]))  # Only gets day of the month which is at index 0
-                prices.append(float(row[1]))
+                prices.append(float(row[1])) # Convert to float for more precision
                 self.predict_price(dates, prices)
 
 
