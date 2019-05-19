@@ -1,4 +1,4 @@
-# Classes and Methods of Example - 2
+# Classes and their Methods of Example - 2
 
 1. class FeedData(Stage)
 
