@@ -8,6 +8,7 @@
 4. As the tasks are divided into stages, error handling is always focused on the particular stage rather than the entire project.
 5. The config.yaml file is accessible via path defined and it is convenient to use throughout the project.
 6. Since the project is shared on GitHub, the data or code reusability is high.
+7. The example 2 i.e., Apple Share Price Prediction is implemented in this framework and it helps Data Scientists to predict the future prices without any hustle.
 
 **With benefits there will always be some drawbacks. Identified are listed below:**
 
