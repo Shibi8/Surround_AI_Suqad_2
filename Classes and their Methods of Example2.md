@@ -18,6 +18,8 @@
           def operate(self, surround_data, config):
              print("this is working fine")
 
+Here, the class `FeedData(Stage)` is nothing but a test class to check whether the integration of Vector Regression model into the Surround Framework is working fine or not.
+
 
 2. classs SVRData(SurroundData)
 
