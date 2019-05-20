@@ -453,5 +453,3 @@ from surround import Stage, SurroundData, Surround, Config
            print(self.data)
 
 **Note:** Although a BasicData object is initialised, it is not modified throughout this example. Instead, internal data objects are used in each stage.
-
-
