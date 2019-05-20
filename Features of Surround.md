@@ -14,4 +14,4 @@
 1. Plotting a graph or chart is a bit difficult, so as the project progresses we have to focus on that.
 2. Necessity of use of operate function in every class is yet to be clarified.
 
-**_Note_:** The document is just a draft and has to be redefined as the Project progresses.
+**_Note_:** The document is based on the initial research and has to be redefined as the Project progresses.
