@@ -24,6 +24,7 @@
 from surround import SurroundData, Stage
 import numpy as np
 from sklearn.svm import SVR
+from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import pandas as pd
 import csv
@@ -39,21 +40,25 @@ class FeedData(Stage):
 
 
 class SVRData(SurroundData):
-    dates = []
-    prices = []
 
     def __init__(self):
         self.dta = pd.DataFrame()
 
+
     def get_data(self):
         self.dta = pd.read_csv('config.yaml')
+        self.dates = []
+        self.prices = []
+        self.x = [self.prices]
+
+
 
 
 class ComputeForecast(SurroundData, Stage):
 
 
 
-    def predict_price(self, dates, prices):
+    def predict_price(self, dates, prices, x):
         """
         Builds predictive model and graphs it
         This function creates 3 models, each of them will be a type of support vector machine.
@@ -92,37 +97,16 @@ class ComputeForecast(SurroundData, Stage):
         svr_rbf.fit(dates, prices)
         svr_lin.fit(dates, prices)
         svr_poly.fit(dates, prices)
-        print(svr_rbf.predict(dates))
-        print(svr_lin.predict(dates))
-        print(svr_poly.predict(dates))
-
-    def operate(self, surround_data, config):
-        svr_data = surround_data.dta
-        file_path = config.get_path("surround.path")
-        with open(file_path, 'r') as csvfile:
-            # csvFileReader allows us to iterate over every row in our csv file
-            csvFileReader = csv.reader(csvfile)
-            next(csvFileReader)  # skipping column names
-            for row in csvFileReader:
-                surround_data.dates.append(int(row[0].split('-')[0]))  # Only gets day of the month which is at index 0
-                surround_data.prices.append(float(row[1]))  # Convert to float for more precision
-                self.predict_price(surround_data.dates, surround_data.prices)
-
-                return
-
-
-class PlotResult(SurroundData, Stage):
-
-    def __init__(self):
-        self.surround_data = pd.DataFrame()
-
-    def plot(self, dates, prices):
         plt.scatter(dates, prices, color='black', label='Data')  # plotting the initial datapoints
         # The graphs are plotted with the help of SVR object in scikit-learn using the dates matrix as our parameter.
         # Each will be a distinct color and and give them a distinct label.
+        plt.scatter(dates, prices, color='black', label='Data')
         plt.plot(dates, svr_rbf.predict(dates), color='red', label='RBF model')  # plotting the line made by the RBF kernel
         plt.plot(dates, svr_lin.predict(dates), color='green', label='Linear model')  # plotting the line made by linear kernel
         plt.plot(dates, svr_poly.predict(dates), color='blue', label='Polynomial model')  # plotting the line made by polynomial kernel
+        print(svr_rbf.predict(dates))
+        print(svr_lin.predict(dates))
+        print(svr_poly.predict(dates))
         plt.xlabel('Date')  # Setting the x-axis
         plt.ylabel('Price')  # Setting the y-axis
         plt.title('Support Vector Regression for Apple Stock')  # Setting title
@@ -131,6 +115,21 @@ class PlotResult(SurroundData, Stage):
 
         return svr_rbf.predict(x)[0], svr_lin.predict(x)[0], svr_poly.predict(x)[0]  # returns predictions from each of our models
 
+
     def operate(self, surround_data, config):
-        self.plot(self, dates, prices)
-        return
+        self.dta = surround_data
+        file_path = config.get_path("surround.path")
+        with open(file_path, 'r') as csvfile:
+            # csvFileReader allows us to iterate over every row in our csv file
+            csvFileReader = csv.reader(csvfile)
+            next(csvFileReader)  # skipping column names
+            for row in csvFileReader:
+                surround_data.dates.append(int(row[0].split('-')[0]))  # Only gets day of the month which is at index 0
+                surround_data.prices.append(float(row[1]))  # Convert to float for more precision
+
+                self.predict_price(surround_data.dates, surround_data.prices, 6)
+
+
+
+                return
+
