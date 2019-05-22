@@ -129,6 +129,8 @@ If the module has an attribute, the defined package path is called or accessed, 
 
 #### 3. class Wrapper():
 
+A wrapper class wraps an object which it then proxies unhandled calls. Wrapper functions can be used as an interface to adapt to the existing codes, to save from changing current codes back and forth. 
+
     class Wrapper():
         
         def __init__(self, surround, type_of_uploaded_object=None):
