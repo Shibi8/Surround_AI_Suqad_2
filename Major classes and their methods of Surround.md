@@ -42,7 +42,7 @@ This method is used to Initialise stage with some data
         def __init__(self, surround_stages=None, module=None):
             self.surround_stages = surround_stages
 
-The collecions module has some concrete classes that derive from ABCs; these can be further derived. In addition, the collections.abc submodule has some ABCs that can be used to test whether a class or instance provides a particular interface, for example, is it hashable or a mapping.
+The collections module has some concrete classes that derive from ABCs; these can be further derived. In addition, the collections.abc submodule has some ABCs that can be used to test whether a class or instance provides a particular interface, for example, is it hashable or a mapping.
 
 Each abstract base class (ABC) in the collections module provides a common feature (or set of features) with the method functions that are required to implement that feature. In some cases, the features build on each other, and a number of method functions are required.
 
