@@ -5,7 +5,37 @@ Classes are used to create Objects.
 Methods are a special kind of function that are defined within a class. Method cannot be called by its name only, we need to invoke the class by a reference of that class in which it is defined, i.e. method is defined within a class and hence they are dependent on that class.
 
 
-#### 1. class Surround(ABC):
+#### 1. class Stage(ABC):
+
+    class Stage(ABC):
+        
+        def dump_output(self, surround_data, config):
+
+The method is used to dump the output of each stage.
+1. parameter surround_data is used to store intermediate data from each stage in the pipeline
+2. surround_data must be an instance or child of the SurroundData class
+3. parameter config is the Config of the pipeline
+4. type config: <class 'surround.config.Config'>
+
+
+        @abstractmethod
+        def operate(self, surround_data, config):
+
+A stage in a surround pipeline.
+1. parameter surround_data is used to store intermediate data from each stage in the pipeline
+2. surround_data must be an instance or child of the SurroundData class
+3. the parameter config contains the settings for each stage
+4. type config: <class 'surround.config.Config'>
+
+
+        def init_stage(self, config):
+
+This method is used to Initialise stage with some data
+1. the parameter config contains the settings for each stage
+2. type config: <class 'surround.config.Config'>
+
+
+#### 2. class Surround(ABC):
 
     class Surround(ABC):
 
@@ -14,7 +44,7 @@ Methods are a special kind of function that are defined within a class. Method c
 
 The collections module has some concrete classes that derive from ABCs; these can be further derived. In addition, the collections.abc submodule has some ABCs that can be used to test whether a class or instance provides a particular interface, for example, is it hashable or a mapping.
 
-Here, this method is used to carryout initialisation of the class and it can also be used to initialize objects of the class. self.surround_stages is set to surround_stages 
+Here, this method is used to carryout initialisation of the class and it can also be used to initialize objects of the class. An instance is created using surround_stages which is assigned to self.surround_stages.
 
             if module:
                # Module already imported and has a file attribute
@@ -27,6 +57,7 @@ Here, this method is used to carryout initialisation of the class and it can als
 
                 self.set_config(Config(root_path))
 
+If the module has an attribute, the defined package path is called or accessed, and root_path is set to the package_path. Else, a ValueError is thrown with the message "Invalid Python module %s" % module.
 
                     if not os.path.exists(self.config["output_path"]):
                     os.makedirs(self.config["output_path"])
@@ -90,9 +121,10 @@ Here, this method is used to carryout initialisation of the class and it can als
 
 
 
-#### 2. class Wrapper():
+#### 3. class Wrapper():
 
     class Wrapper():
+        
         def __init__(self, surround, type_of_uploaded_object=None):
             self.surround = surround
             self.actual_type_of_uploaded_object = None
@@ -136,7 +168,7 @@ Here, this method is used to carryout initialisation of the class and it can als
             return self.surround.config
 
 
-#### 3. class AllowedTypes(Enum):
+#### 4. class AllowedTypes(Enum):
 
     class AllowedTypes(Enum):
         JSON = ["application/json"]
@@ -145,50 +177,3 @@ Here, this method is used to carryout initialisation of the class and it can als
 An enumeration is a set of symbolic names (members) bound to unique, constant values. Within an enumeration, the members can be compared by identity, and the enumeration itself can be iterated over.
 
 Here, an Enum class `AllowedTypes` has been created which specifies the types, with attributes `JSON` and `FILE` called enumeration members. These members are constants. If we try and modify any of the members, we will get an error saying `AttributeError`.
-
-
-#### 4. class Stage(ABC):
-
-    class Stage(ABC):
-        
-        def dump_output(self, surround_data, config):
-
-Dump the output of each stage.
-1. param surround_data: Stores intermediate data from each stage in the pipeline
-2. type surround_data: Instance or child of the SurroundData class
-3. param config: Config of the pipeline
-4. type config: <class 'surround.config.Config'>
-
-
-        @abstractmethod
-        def operate(self, surround_data, config):
-
-A stage in a surround pipeline.
-1. param surround_data: Stores intermediate data from each stage in the pipeline
-2. type surround_data: Instance or child of the SurroundData class
-3. param config: Contains the settings for each stage
-4. type config: <class 'surround.config.Config'>
-
-
-        def init_stage(self, config):
-
-Initialise stage with some data
-1. param config: Contains the settings for each stage
-2. type config: <class 'surround.config.Config'>
-
-
-
-
-#### 1. def __init__(self, surround_stages=None, module=None):
-
-#### 2. def set_config(self, config):
-
-#### 3. def _execute_stage(self, stage, stage_data):
-
-#### 4. def init_stages(self):
-
-#### 5. def process(self, surround_data):
-
-#### 6. def __init__(self, surround, type_of_uploaded_object=None):
-
-#### 7. def run(self, input_data):
