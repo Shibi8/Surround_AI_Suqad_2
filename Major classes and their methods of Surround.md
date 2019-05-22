@@ -79,6 +79,7 @@
 
             surround_data.thaw()
 
+The collections module has some concrete classes that derive from ABCs; these can be further derived. In addition, the collections.abc submodule has some ABCs that can be used to test whether a class or instance provides a particular interface, for example, is it hashable or a mapping.
 
 #### 2. class Wrapper():
 
@@ -141,27 +142,30 @@ Here, an Enum class `AllowedTypes` has been created which specifies the types, w
 
     class Stage(ABC):
         def dump_output(self, surround_data, config):
-            """Dump the output of each stage.
-            :param surround_data: Stores intermediate data from each stage in the pipeline
-            :type surround_data: Instance or child of the SurroundData class
-            :param config: Config of the pipeline
-            :type config: <class 'surround.config.Config'>
-            """
+
+Dump the output of each stage.
+1. param surround_data: Stores intermediate data from each stage in the pipeline
+2. type surround_data: Instance or child of the SurroundData class
+3. param config: Config of the pipeline
+4. type config: <class 'surround.config.Config'>
+
 
         @abstractmethod
         def operate(self, surround_data, config):
-            """A stage in a surround pipeline.
-            :param surround_data: Stores intermediate data from each stage in the pipeline
-            :type surround_data: Instance or child of the SurroundData class
-            :param config: Contains the settings for each stage
-            :type config: <class 'surround.config.Config'>
-            """
+
+A stage in a surround pipeline.
+1. param surround_data: Stores intermediate data from each stage in the pipeline
+2. type surround_data: Instance or child of the SurroundData class
+3. param config: Contains the settings for each stage
+4. type config: <class 'surround.config.Config'>
+
 
         def init_stage(self, config):
-            """Initialise stage with some data
-            :param config: Contains the settings for each stage
-            :type config: <class 'surround.config.Config'>
-            """
+
+Initialise stage with some data
+1. param config: Contains the settings for each stage
+2. type config: <class 'surround.config.Config'>
+
 
 
 ### Methods
