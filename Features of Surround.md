@@ -2,7 +2,7 @@
 
 **The features of Surround framework include:**
 
-1. Surround framework is predefined, and has structured and modular format of programming that makes understading easier to those who are new to programming.
+1. Surround framework is predefined, and has structured and modular format of programming that makes understanding easier to those who are new to programming.
 2. Each task is performed in Pipeline fashion which makes it easier to understand the program and data flow.
 3. Data can be easily manupulated and accessed around the project.
 4. As the tasks are divided into stages, error handling is always focused on the particular stage rather than the entire project.
