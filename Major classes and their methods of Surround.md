@@ -1,4 +1,9 @@
-### Classes
+### Classes and their Methods
+
+Classes are used to create Objects.
+
+Methods are a special kind of function that are defined within a class. Method cannot be called by its name only, we need to invoke the class by a reference of that class in which it is defined, i.e. method is defined within a class and hence they are dependent on that class.
+
 
 #### 1. class Surround(ABC):
 
@@ -6,6 +11,10 @@
 
         def __init__(self, surround_stages=None, module=None):
             self.surround_stages = surround_stages
+
+The collections module has some concrete classes that derive from ABCs; these can be further derived. In addition, the collections.abc submodule has some ABCs that can be used to test whether a class or instance provides a particular interface, for example, is it hashable or a mapping.
+
+Here, this method is used to carryout initialisation of the class and it can also be used to initialize objects of the class. self.surround_stages is set to surround_stages 
 
             if module:
                # Module already imported and has a file attribute
@@ -79,7 +88,7 @@
 
             surround_data.thaw()
 
-The collections module has some concrete classes that derive from ABCs; these can be further derived. In addition, the collections.abc submodule has some ABCs that can be used to test whether a class or instance provides a particular interface, for example, is it hashable or a mapping.
+
 
 #### 2. class Wrapper():
 
@@ -141,6 +150,7 @@ Here, an Enum class `AllowedTypes` has been created which specifies the types, w
 #### 4. class Stage(ABC):
 
     class Stage(ABC):
+        
         def dump_output(self, surround_data, config):
 
 Dump the output of each stage.
@@ -168,9 +178,6 @@ Initialise stage with some data
 
 
 
-### Methods
-
-Method cannot be called by its name only, we need to invoke the class by a reference of that class in which it is defined, i.e. method is defined within a class and hence they are dependent on that class.
 
 #### 1. def __init__(self, surround_stages=None, module=None):
 
@@ -185,9 +192,3 @@ Method cannot be called by its name only, we need to invoke the class by a refer
 #### 6. def __init__(self, surround, type_of_uploaded_object=None):
 
 #### 7. def run(self, input_data):
-
-#### 8. def dump_output(self, surround_data, config):
-
-#### 9. def operate(self, surround_data, config):
-
-#### 10. def init_stage(self, config):
