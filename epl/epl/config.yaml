@@ -7,3 +7,4 @@ version: latest
 
 surround:
   path_to_epl_data: ../data/epl_csv
+  path_to_output: ../output
