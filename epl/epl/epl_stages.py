@@ -4,10 +4,10 @@ from surround import Stage, SurroundData
 from sklearn.preprocessing import normalize
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.cross_validation import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
-from sklearn.preprocessing import LabelEncoder
 from epl.epl.dbhatta_algorithm import DbhattaAlgorithm
 
 import time
@@ -53,11 +53,12 @@ class WranglingData(Stage):
     def __init__(self):
         self.processed_data = pd.DataFrame()
 
-    # This function clean the row containing empty field.
+    # This function cleans the row containing empty field.
     def clean_empty_data(self):
         self.processed_data.dropna(inplace=True)
 
-    # This function assign the rank of each team.
+    # This function assigns the rank of each team.
+    # One-hot encoding is another option for changing categorical to metric form in our example.
     def categorical_team_to_ordinal_value(self, team):
         elite_team = ["""'Man United'""", 'Liverpool', 'Arsenal', 'Chelsea', 'Tottenham']
         semi_elite_team = ["""'Man City'""", 'Everton', """'Aston Villa'""", 'Newcastle', 'Wolves']
@@ -152,7 +153,58 @@ class ModellingAndPrediction(Stage):
 
         print(self.predicted_output)
 
-    def prediction_report(self, real, prediction):
+    # Function to create the training and test data
+    def train_test_data(self):
+        feature_columns = ['HomeTeam', 'AwayTeam', 'HS', 'AS', 'HST', 'AST', 'HF', 'AF', 'HC', 'AC', 'HR', 'AR']
+
+        x_data = self.processed_data[feature_columns]
+        y_data = self.processed_data['FTR']
+        # print(x_data)
+        # print(y_data)
+
+        # This function splits data into 70% of training data and 30% of test data.
+        # And returns the 2 sets of panda dataframe as train and test data features
+        # and 2 sets of panda series as train and test data class.
+        x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.3, random_state=55)
+
+        # This is the Logistic Regression model.
+        # instantiate the model (using the default parameters)
+        log_reg = LogisticRegression()
+        # fit the model with data
+        log_reg.fit(x_train, y_train)
+        # This is the predicted data.
+        y_predicted = log_reg.predict(x_test)
+
+        # # This is the model created by Dbhatta.
+        # dbhatta = DbhattaAlgorithm()
+        # dbhatta.fit(x_train, y_train)
+        # y_predicted = dbhatta.predict(x_test)
+
+        print("This is the predicted data {0}".format(y_predicted))
+        # Combining all the test data to get the final result.
+        self.combine_result(x_test, y_test, y_predicted)
+
+    def operate(self, surround_data, config):
+        self.processed_data = surround_data.input_data
+        self.train_test_data()
+        surround_data.result_data = self.predicted_output
+        print(surround_data.result_data)
+
+
+class DisplayOutput(Stage):
+
+    def display_histogram(self, histo_data, output_dir):
+        # Display the histogram using matplotlib's pyplot.
+        fig1, ax = plt.subplots(1, 2)
+        histo_data.FTR.value_counts().plot("bar", ax=ax[0]).set_title("Real")
+        histo_data.Predicted_FTR.value_counts().plot("bar", ax=ax[1]).set_title("Predicted")
+        plt.show()
+
+        # Saving plotted image to output folder
+        fig1.savefig(output_dir + "/compare_result.png")
+        plt.close()
+
+    def prediction_report(self, real, prediction, output_dir):
         h = 0
         a = 0
         d = 0
@@ -168,74 +220,28 @@ class ModellingAndPrediction(Stage):
         print("Total draw: {0}".format(d))
 
         # This is the confusion matrix of Home win, Away win or Draw.
-        labels = ["A", "D", "H"]
+        labels = ["H", "D", "A"]
         cnf_matrix = metrics.confusion_matrix(real, prediction, labels)
         print(cnf_matrix)
-
         print("The accuracy of the Logistic regression model is: {0}" .format(metrics.accuracy_score(real, prediction)))
 
-    # Function to create the training and test data
-    def train_test_data(self):
-        feature_columns = ['HomeTeam', 'AwayTeam', 'HS', 'AS', 'HST', 'AST', 'HF', 'AF', 'HC', 'AC', 'HR', 'AR']
+        df_confusion = pd.DataFrame(cnf_matrix, index=["Home Win", "Draw", "Away Win"], columns=["Predicted Home Win", "Predicted Draw", "Predicted Away Win"])
 
-        x_data = self.processed_data[feature_columns]
-        y_data = self.processed_data['FTR']
-        # print(x_data)
-        # print(y_data)
-
-        # This function splits data into 70% of training data and 30% of test data.
-        # And returns the 2 sets of panda dataframe as train and test data features
-        # and 2 sets of panda series as train and test data class.
-        x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.3, random_state=55)
-
-        # instantiate the model (using the default parameters)
-        log_reg = LogisticRegression()
-
-        # fit the model with data
-        log_reg.fit(x_train, y_train)
-
-        # This is the predicted data.
-        y_predicted = log_reg.predict(x_test)
-
-        # dbhatta = DbhattaAlgorithm()
-        # dbhatta.fit(x_train, y_train)
-        # y_predicted = dbhatta.predict(x_test)
-
-        print("This is the predicted data {0}".format(y_predicted))
-        # Combining all the test data to get the final result.
-        self.combine_result(x_test, y_test, y_predicted)
-
-        # Prediction statistics
-        self.prediction_report(y_test, y_predicted)
-
-    def operate(self, surround_data, config):
-        self.processed_data = surround_data.input_data
-        self.train_test_data()
-        surround_data.result_data = self.predicted_output
-
-
-class DisplayOutput(Stage):
-
-    def display_histogram(self, histo_data):
-        print(type(histo_data))
-        histo_values = histo_data.values
-        print(type(histo_values))
-        plt.hist(histo_values)
+        fig2 = plt.figure(2)
+        sns.heatmap(df_confusion, annot=True, cbar=False)
+        # Saving plotted image to output folder
+        fig2.savefig(output_dir + "/confusion_matrix.png")
         plt.show()
-        print("Display histogram is working fine.")
-
-    def label_encoding(self, result_data):
-        ftr_encoder = LabelEncoder()
-        result_data['FTR_encoded'] = ftr_encoder.fit_transform(result_data.FTR)
-        result_data['Predicted_FTR_encoded'] = ftr_encoder.fit_transform(result_data.Predicted_FTR)
-        return result_data
 
     def operate(self, surround_data, config):
         # print(surround_data.result_data)
-        # Full time result has been encoded to display in the graph.
-        encoded_surround_data = self.label_encoding(surround_data.result_data)
-        # Plot the histogram of actual Full Time Result .
-        self.display_histogram(encoded_surround_data['FTR_encoded'])
-        # Plot the histogram of predicted Full Time Result.
-        self.display_histogram(encoded_surround_data['Predicted_FTR_encoded'])
+        # Save all the output of the test case in the "predicted output.csv" file in output folder.
+        output_dir = config.get_path("surround.path_to_output")
+        surround_data.result_data.to_csv(output_dir + "/test_output.csv")
+
+        # Plot and save the histogram of actual Full Time Result and predicted in same plot.
+        self.display_histogram(surround_data.result_data, output_dir)
+
+        # Prediction statistics, especially confusion matrix plot and saving it to png file.
+        self.prediction_report(surround_data.result_data.FTR, surround_data.result_data.Predicted_FTR, output_dir)
         print("It's fine up to here.")

@@ -4,7 +4,7 @@
 import pandas as pd
 from sklearn.preprocessing import normalize
 from sklearn.cross_validation import train_test_split
-from surround import Config
+from sklearn import metrics
 
 
 class DbhattaAlgorithm():
@@ -16,10 +16,10 @@ class DbhattaAlgorithm():
         self.total_home_weight = pd.DataFrame()
         self.total_away_weight = pd.DataFrame()
         self.num_features = 0
-        self.balance = 0.005
+        self.balance = 0.001
         self.home_max = 1.0
-        self.home_min = 0.025
-        self.away_max = -0.025
+        self.home_min = 0.030
+        self.away_max = -0.035
         self.away_min = -1.0
 
     def set_initial_weight(self, wt):
@@ -67,7 +67,6 @@ class DbhattaAlgorithm():
         min_Hindex = home_row_data.index(min(home_row_data))
         max_Aindex = away_row_data.index(max(away_row_data))
         min_Aindex = away_row_data.index(min(away_row_data))
-        print(self.home_weight["'w_" + str(max_Hindex) + "'"])
 
         self.home_weight["'w_" + str(max_Hindex) + "'"] += improve_weight_factor
         self.home_weight["'w_" + str(min_Hindex) + "'"] -= improve_weight_factor
@@ -110,8 +109,10 @@ class DbhattaAlgorithm():
                     improve_weight_factor = - self.balance
                     self.improve_weight(row_data, improve_weight_factor)
 
-            self.total_home_weight = self.total_home_weight.add(self.home_weight, fill_value=0).apply(lambda x: x/2)
-            self.total_away_weight = self.total_away_weight.add(self.away_weight, fill_value=0).apply(lambda x: x/2)
+            self.total_home_weight = self.total_home_weight.apply(lambda x: x * 9)
+            self.total_away_weight = self.total_away_weight.apply(lambda x: x * 9)
+            self.total_home_weight = self.total_home_weight.add(self.home_weight, fill_value=0).apply(lambda x: x/10)
+            self.total_away_weight = self.total_away_weight.add(self.away_weight, fill_value=0).apply(lambda x: x/10)
             self.home_weight = self.total_home_weight.copy()
             self.away_weight = self.total_away_weight.copy()
 
