@@ -18,7 +18,6 @@ A predictive model for stock Prices
  	- [3.1.2 `predict_prices` method](#predict_prices)
 - [4.0 Dependencies](#dependencies)
 - [5.0	Usage](#usage)
-- [6.0 Result](#result)
 
 # <a name="introduction"></a> 1.0 Introduction
 # <a name="purpose"></a> 1.1 Purpose of this document
