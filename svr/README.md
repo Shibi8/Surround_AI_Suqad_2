@@ -36,7 +36,7 @@ There are several categories of data that can be used when designing a price pro
 
 # <a name="functions_summary"></a> 3.0 Summary of Functions
 ## <a name="get_data"></a> 3.1.1 `get_data` method
-The `get_data` method reads data from a file (`snap.csv`) and adds data to the lists dates and prices. It uses the with as block to open the file and assigns it to `csvfile.csv`. `FileReader` allows us to iterate over every row in our csv file. Furthermore, `next(csvFileReader)` skips column names.
+The `get_data` method reads data from a file (`AAPL.csv`) and adds data to the lists dates and prices. It uses the with as block to open the file and assigns it to `csvfile.csv`. `FileReader` allows us to iterate over every row in our csv file. Furthermore, `next(csvFileReader)` skips column names.
 
 `dates.append(int(row[0].split('-')[0]))` gets day of the month which is at index zero since dates are in the format [date]-[month]-[year].
 
