@@ -1,0 +1,12 @@
+output:
+  text: Hello World
+
+image: svr
+company: yourcompany
+version: latest
+
+# Details of class inheriting from Wrapper
+wrapper-info: svr.wrapper.PipelineWrapper
+
+surround:
+  path: '../data/AAPL.csv'

@@ -1,11 +1,6 @@
 import logging
 from surround import Surround, Config
-from arima.SVR_stages import FeedData, SVRData, ComputeForecast, PlotResult
-import glob
-import pandas as pd
-# from .wrapper import PipelineWrapper
-# import os
-# import json
+from svr.SVR_stages import FeedData, SVRData, ComputeForecast, PlotResult
 logging.basicConfig(level=logging.INFO)
 
 
@@ -27,5 +22,4 @@ if __name__ == "__main__":
     surround.init_stages()
     svr_data = SVRData()
     svr_data.get_data()
-
     surround.process(svr_data)
