@@ -14,13 +14,16 @@ ii. Stage is an implementation of data transformation. Here is the place Surroun
 
 ### 3.	Easier Access to Data (SurroundData)
 
-i.	SurroundData is a sharable item between stages that holds vital data for each stage. A stage will read some data from SurroundData, process it, then at that point set back new data that will be utilized by different stage(s). When you expand this class, you can include as many number of variables as you require to enable you to change input data into output data. In any case, there are 4 center factors that are being utilized.
+i. SurroundData is a sharable item between stages that holds vital data for each stage. A stage will read some data from SurroundData, process it, then at that point set back new data that will be utilized by different stage(s). When you expand this class, you can include as many number of variables as you require to enable you to change input data into output data. In any case, there are 4 center factors that are being utilized.
+
 - **stage_metadata** is information that can be used to identify a stage.
 - **execution_time** is recorded time to complete a process.
 - **errors** is information to identify failure of a stage.
 - **warnings** is information when transformation is not 100% right.
 
-ii.	class SVRData(SurroundData):
+ii.	
+          
+          class SVRData(SurroundData):
 
           def __init__(self):
           self.dta = pd.DataFrame()
@@ -37,7 +40,10 @@ ii.	class SVRData(SurroundData):
 
 i.	It is a group of numerous stages or just an initial stage to change raw information into meaningful data. You can set the order of stages directly or by means of a config file. The config file enables you to characterize more than 1 pipeline execution and after that you can switch between them effectively.
 
-ii.	Code snippets
+ii. A file is created with extension .surround to create a project in the pipeline.
+
+          project-info:
+            project-name: svr
 
 
 ### 5.	Config.yaml can be configured in the start for the whole project, Global variable, methods
@@ -74,5 +80,5 @@ ii.	An example from Apple Stock Price Predictions
     surround:
     path: '../data/AAPL.csv'
 
-iii. Description
+iii. YAML is a human-readable data serialization format that takes concepts from Python, ideas from XML and the data format of electronic mail. The configuration file is written in Python code and saved separately. The config.yaml file can be called/read from within a code.
 
