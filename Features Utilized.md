@@ -19,7 +19,13 @@ i.	SurroundData is a sharable item between stages that holds vital data for each
 - errors is information to identify failure of a stage.
 - warnings is information when transformation is not 100% right.
 
-ii.	
+ii.	class SVRData(SurroundData):
+    
+    def __init__(self):
+        self.dta = pd.DataFrame()
+
+    def get_data(self):
+        self.dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/AAPL (3).csv')
 
 
 ### 4.	Surround(): creates Pipeline
