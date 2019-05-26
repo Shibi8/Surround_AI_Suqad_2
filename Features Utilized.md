@@ -7,13 +7,13 @@ Division of a program/class into sub-classes and testing separately makes it eas
 
 ### 2.	Re-usability of code (Stages)
 
-i. Same code can be used in other code to perform specific functionality. 
-ii. A usage of information change. Here is the place SurroundData is altered to accomplish the outcome that you need. Each stage is just meant to execute a lot of related actions. First stage can be where you get ready information to be prepared and last stage can be the place your populate information to be sent back to the client.
+i. Same code can be used in other code to perform specific functionality as the code is divided into stages.
+ii. Stage is an implementation of data transformation. Here is the place SurroundData is altered to accomplish the outcome that you need. Each stage is just meant to execute a set of related actions. First stage can be where you get ready information to be processed and last stage can be the place your populate information to be sent back to the client.
 
 
-### 3.	Easier Access to Data (SurroundData Class)
+### 3.	Easier Access to Data (SurroundData)
 
-i.	SurroundData is a sharable item between stages that holds vital data for each stage. A phase will read some data from SurroundData, process it, at that point set back new data that will be utilized by different stage(s). When you broaden this class, you can include as many number of variables as you require to enable you to change input data into output data. In any case, there are 4 center factors that are being utilized.
+i.	SurroundData is a sharable item between stages that holds vital data for each stage. A stage will read some data from SurroundData, process it, then at that point set back new data that will be utilized by different stage(s). When you expand this class, you can include as many number of variables as you require to enable you to change input data into output data. In any case, there are 4 center factors that are being utilized.
 - stage_metadata is information that can be used to identify a stage.
 - execution_time is recorded time to complete a process.
 - errors is information to identify failure of a stage.
@@ -34,7 +34,38 @@ i.	It is a group of numerous stages or just an initial stage to change raw infor
 ii.	Code snippets
 
 ### 5.	Config.yaml can be configured in the start for the whole project, Global variable, methods
-i.	Path to data
-ii.	Code snippets
+
+i.	Path to data - 'Surround_AI_Suqad_2/svr/data/AAPL.csv'
+
+ii.	An example from Apple Stock Price Predictions
+
+    class SVRData(SurroundData):
+
+    def __init__(self):
+        self.dta = pd.DataFrame()
+
+
+    def get_data(self):
+        self.dta = pd.read_csv('config.yaml')
+        self.dates = []
+        self.prices = []
+        self.x = [self.prices]
+
+
+`config.yaml`
+
+    output:
+    text: Hello World
+
+    image: svr
+    company: yourcompany
+    version: latest
+
+    #Details of class inheriting from Wrapper
+    wrapper-info: svr.wrapper.PipelineWrapper
+
+    surround:
+    path: '../data/AAPL.csv'
+
 iii. Description
 
