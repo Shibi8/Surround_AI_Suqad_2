@@ -8,6 +8,7 @@ Division of a program/class into sub-classes and testing separately makes it eas
 ### 2.	Re-usability of code (Stages)
 
 i. Same code can be used in other code to perform specific functionality as the code is divided into stages.
+
 ii. Stage is an implementation of data transformation. Here is the place SurroundData is altered to accomplish the outcome that you need. Each stage is just meant to execute a set of related actions. First stage can be where you get ready information to be processed and last stage can be the place your populate information to be sent back to the client.
 
 
@@ -31,7 +32,9 @@ ii.	class SVRData(SurroundData):
 ### 4.	Surround(): creates Pipeline
 
 i.	It is a group of numerous stages or just an initial stage to change raw information into meaningful data. You can set the order of stages directly or by means of a config file. The config file enables you to characterize more than 1 pipeline execution and after that you can switch between them effectively.
+
 ii.	Code snippets
+
 
 ### 5.	Config.yaml can be configured in the start for the whole project, Global variable, methods
 
