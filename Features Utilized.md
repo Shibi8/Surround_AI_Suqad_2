@@ -15,18 +15,22 @@ ii. Stage is an implementation of data transformation. Here is the place Surroun
 ### 3.	Easier Access to Data (SurroundData)
 
 i.	SurroundData is a sharable item between stages that holds vital data for each stage. A stage will read some data from SurroundData, process it, then at that point set back new data that will be utilized by different stage(s). When you expand this class, you can include as many number of variables as you require to enable you to change input data into output data. In any case, there are 4 center factors that are being utilized.
-- stage_metadata is information that can be used to identify a stage.
-- execution_time is recorded time to complete a process.
-- errors is information to identify failure of a stage.
-- warnings is information when transformation is not 100% right.
+- **stage_metadata** is information that can be used to identify a stage.
+- **execution_time** is recorded time to complete a process.
+- **errors** is information to identify failure of a stage.
+- **warnings** is information when transformation is not 100% right.
 
 ii.	class SVRData(SurroundData):
-    
-    def __init__(self):
-        self.dta = pd.DataFrame()
 
-    def get_data(self):
-        self.dta = pd.read_csv('/Users/saikrishna/Documents/GitHub/Surround_AI_Suqad_2/Arima/arima/data/AAPL (3).csv')
+          def __init__(self):
+          self.dta = pd.DataFrame()
+
+
+          def get_data(self):
+          self.dta = pd.read_csv('config.yaml')
+          self.dates = []
+          self.prices = []
+          self.x = [self.prices]
 
 
 ### 4.	Surround(): creates Pipeline
