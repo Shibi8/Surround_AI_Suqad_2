@@ -1,4 +1,4 @@
-E# Features Utilized of Surround:
+# Features Utilized of Surround:
 
 ### 1.	Modular Programming:
 
@@ -23,7 +23,8 @@ ii.
 
 
 ### 4.	Surround(): creates Pipeline
-i.	Explain
+
+i.	It is a group of numerous stages or just an initial stage to change raw information into meaningful data. You can set the order of stages directly or by means of a config file. The config file enables you to characterize more than 1 pipeline execution and after that you can switch between them effectively.
 ii.	Code snippets
 
 ### 5.	Config.yaml can be configured in the start for the whole project, Global variable, methods
