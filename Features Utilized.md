@@ -1,15 +1,26 @@
-# Features Utilized of Surround:
+E# Features Utilized of Surround:
 
 ### 1.	Modular Programming:
 
-Division of a program/class into sub-classes and testing separately makes it easy to read, maintain and rely upon. Minimization of dependencies is the goal. When creating a modular system, several modules are built separately and more or less independently. The executable application will be created by putting them together. every file, which has the file extension .py and consists of proper Python code, can be seen or is a module! There is no special syntax required to make such a file a module. A module can contain arbitrary objects, for example files, classes or attributes. All those objects can be accessed after an import.
+Division of a program/class into sub-classes and testing separately makes it easy to read, maintain and rely upon. When a modular system is created, several modules are built separately and more or less independently. The executable application will then be created by putting them together. In other words, Every file, which has the file extension .py and consists of proper Python code is a module. There is no special syntax required to make such a file a module. Usually, modules contain functions or classes, but there can be "plain" statements in them as well. These statements can be used to initialize the module. They are only executed when the module is imported. 
+
 
 ### 2.	Re-usability of code (Stages)
-i.	Same code can be used in other code to perform specific functionality. 
 
-### 3.	Easier Access to Data (Surround Data Class)
-i.	Explain
-ii.	Code snippets
+i. Same code can be used in other code to perform specific functionality. 
+ii. A usage of information change. Here is the place SurroundData is altered to accomplish the outcome that you need. Each stage is just meant to execute a lot of related actions. First stage can be where you get ready information to be prepared and last stage can be the place your populate information to be sent back to the client.
+
+
+### 3.	Easier Access to Data (SurroundData Class)
+
+i.	SurroundData is a sharable item between stages that holds vital data for each stage. A phase will read some data from SurroundData, process it, at that point set back new data that will be utilized by different stage(s). When you broaden this class, you can include as many number of variables as you require to enable you to change input data into output data. In any case, there are 4 center factors that are being utilized.
+- stage_metadata is information that can be used to identify a stage.
+- execution_time is recorded time to complete a process.
+- errors is information to identify failure of a stage.
+- warnings is information when transformation is not 100% right.
+
+ii.	
+
 
 ### 4.	Surround(): creates Pipeline
 i.	Explain
